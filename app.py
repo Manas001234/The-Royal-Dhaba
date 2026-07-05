@@ -1,7 +1,20 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
+from authlib.integrations.flask_client import OAuth
+import os
 
 app = Flask(__name__)
-app.secret_key = 'royal-dhaba-secret-key-change-this-later'  # session ke liye zaroori
+app.secret_key = os.environ.get('SECRET_KEY', 'royal-dhaba-secret-key-change-this-later')
+
+# ---------- GOOGLE OAUTH SETUP ----------
+oauth = OAuth(app)
+google = oauth.register(
+    name='google',
+    client_id=os.environ.get('GOOGLE_CLIENT_ID'),
+    client_secret=os.environ.get('GOOGLE_CLIENT_SECRET'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={'scope': 'openid email profile'}
+)
+
 
 @app.route('/')
 def home():
@@ -48,7 +61,34 @@ def payment():
     return render_template('payment.html')
 
 
-# ---------- CART ROUTES (naye) ----------
+# ---------- GOOGLE LOGIN ROUTES (naye) ----------
+
+@app.route('/login/google')
+def login_google():
+    redirect_uri = url_for('auth_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@app.route('/auth/callback')
+def auth_callback():
+    token = google.authorize_access_token()
+    user_info = token.get('userinfo')
+    if user_info:
+        session['user'] = {
+            'name': user_info.get('name'),
+            'email': user_info.get('email'),
+            'picture': user_info.get('picture')
+        }
+    return redirect(url_for('home'))
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('login'))
+
+
+# ---------- CART ROUTES (purane) ----------
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():

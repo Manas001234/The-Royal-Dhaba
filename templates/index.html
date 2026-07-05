@@ -42,7 +42,6 @@
     overflow-x: hidden;
   }
 
-  /* string lights across the top */
   .lights {
     position: absolute;
     top: 0; left: 0; right: 0;
@@ -51,25 +50,14 @@
     z-index: 1;
   }
   .lights svg { width: 100%; height: 100%; display: block; }
-  .bulb {
-    animation: glow 2.6s ease-in-out infinite;
-  }
+  .bulb { animation: glow 2.6s ease-in-out infinite; }
   .bulb:nth-child(3n) { animation-delay: 0.4s; }
   .bulb:nth-child(3n+1) { animation-delay: 0.9s; }
   .bulb:nth-child(3n+2) { animation-delay: 1.4s; }
-  @keyframes glow {
-    0%, 100% { opacity: 0.55; }
-    50% { opacity: 1; }
-  }
+  @keyframes glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
 
-  .stage {
-    position: relative;
-    z-index: 5;
-    width: 100%;
-    max-width: 440px;
-  }
+  .stage { position: relative; z-index: 5; width: 100%; max-width: 440px; }
 
-  /* ---- ornate truck-art style frame ---- */
   .frame {
     padding: 6px;
     border-radius: 22px;
@@ -94,7 +82,6 @@
     pointer-events: none;
   }
 
-  /* subtle dotted texture */
   .card::after {
     content: '';
     position: absolute;
@@ -137,7 +124,6 @@
     font-family: 'Fraunces', serif;
   }
 
-  /* Tabs */
   .tabs {
     display: flex;
     margin-bottom: 24px;
@@ -349,6 +335,38 @@
     box-shadow: 0 8px 20px rgba(212,160,23,0.35);
   }
 
+  /* Google button */
+  button.submit.google {
+    background: #fff;
+    color: #3c4043;
+    border: 1.5px solid var(--line);
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 0;
+  }
+  button.submit.google:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0;
+    color: var(--ink-soft);
+    font-size: 11.5px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
   .message {
     padding: 12px 14px;
     border-radius: 10px;
@@ -364,7 +382,6 @@
   .message.success { background: #e4f1e5; color: var(--success); border: 1px solid #c5ddc6; }
   .message.error { background: #f6e2dd; color: var(--danger); border: 1px solid #eec6bb; }
 
-  /* Dashboard */
   .dashboard-hero {
     text-align: center;
     padding: 28px 20px;
@@ -383,7 +400,6 @@
 
   .dash-link { display: block; text-decoration: none; margin-bottom: 10px; }
 
-  /* user count footer */
   .stat-strip {
     margin-top: 22px;
     text-align: center;
@@ -423,6 +439,32 @@
 
       <!-- Auth panels -->
       <div id="auth-view">
+
+        <!--
+          GOOGLE SIGN-IN BUTTON
+          Client ID / Client Secret YAHAN nahi likhna hai —
+          woh Render dashboard ke "Environment" tab me
+          GOOGLE_CLIENT_ID aur GOOGLE_CLIENT_SECRET ke naam se
+          jaate hain, aur app.py unhe wahan se automatically
+          padh leta hai (os.environ.get(...)).
+          Yeh button seedha Flask ke /login/google route ko
+          hit karta hai, jo aage Google ke consent screen
+          par le jaata hai.
+        -->
+        <a href="/login/google" style="text-decoration:none;">
+          <button type="button" class="submit google">
+            <svg width="18" height="18" viewBox="0 0 48 48">
+              <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l6-6C34.6 5.1 29.6 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.2-.1-2.4-.4-3.5z"/>
+              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l6-6C34.6 5.1 29.6 3 24 3c-7.7 0-14.3 4.4-17.7 10.7z"/>
+              <path fill="#4CAF50" d="M24 45c5.5 0 10.4-1.9 14.3-5.1l-6.6-5.4C29.6 36.4 26.9 37 24 37c-5.2 0-9.6-3.3-11.3-8l-6.6 5.1C9.6 40.5 16.2 45 24 45z"/>
+              <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.6 5.4C41.5 35.8 45 30.4 45 24c0-1.2-.1-2.4-.4-3.5z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </a>
+
+        <div class="divider">or sign in manually</div>
+
         <div class="tabs">
           <button type="button" class="tab active" id="tab-login">Sign in</button>
           <button type="button" class="tab" id="tab-register">Register</button>
