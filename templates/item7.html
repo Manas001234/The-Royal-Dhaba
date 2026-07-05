@@ -210,7 +210,7 @@
             padding: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
-            min-width: 200px;
+            min-width: 220px;
             z-index: 1000;
         }
 
@@ -286,7 +286,7 @@
         <div class="menu-grid">
             <!-- Paneer Butter Masala -->
             <div class="paneer-card">
-                <div class="card-image"><img width=350px" src="https://www.vegrecipesofindia.com/wp-content/uploads/2020/01/paneer-butter-masala-1.jpg" alt="Paneer Butter Masala"></div>
+                <div class="card-image"><img width="350px" src="https://www.vegrecipesofindia.com/wp-content/uploads/2020/01/paneer-butter-masala-1.jpg" alt="Paneer Butter Masala"></div>
                 <div class="card-content">
                     <h3 class="paneer-name">Paneer Butter Masala</h3>
                     <p class="paneer-description">A rich and creamy curry made with paneer and a blend of aromatic spices.</p>
@@ -404,7 +404,7 @@
                 <div class="card-image"><img width="300px" src="https://www.vegrecipesofindia.com/wp-content/uploads/2021/04/malai-kofta-1.jpg" alt="Malai Kofta"></div>
                 <div class="card-content">
                     <h3 class="paneer-name">Malai Kofta</h3>
-                    <p class="paneer-description">A creamy, rich mughlai Curry with a yogurt and cashew-based gravy,often featuring aromatic spices.</p>
+                    <p class="paneer-description">A creamy, rich mughlai Curry with a yogurt and cashew-based gravy, often featuring aromatic spices.</p>
                     <div class="rating">
                         <div class="stars">
                             <span class="star">★</span>
@@ -501,33 +501,33 @@
         </div>
         <div class="cart-total" id="cart-total" style="display: none;">
             Total: ₹0
-           <div style="margin-top: 18px;">
-    <a href="{{ url_for('payment') }}" style="text-decoration:none;">
-        <button id="Payment" style="
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
-            color: white;
-            border: none;
-            padding: 13px 20px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255,107,107,0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                <rect x="1" y="4" width="22" height="16" rx="2"/>
-                <line x1="1" y1="10" x2="23" y2="10"/>
-            </svg>
-            Proceed to Payment
-        </button>
-    </a>
-</div>
+        </div>
+        <div id="payment-btn-wrap" style="margin-top: 18px; display: none;">
+            <a href="{{ url_for('payment') }}" style="text-decoration:none;">
+                <button id="Payment" style="
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+                    color: white;
+                    border: none;
+                    padding: 13px 20px;
+                    border-radius: 12px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    box-shadow: 0 8px 20px rgba(255,107,107,0.35);
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                    Proceed to Payment
+                </button>
+            </a>
         </div>
     </div>
 
@@ -536,7 +536,7 @@
         Item added to cart! 🎉
     </div>
 
-   <script>
+    <script>
         let cart = [];
         let total = 0;
 
@@ -561,10 +561,12 @@
         function updateCartDisplay() {
             const cartItemsDiv = document.getElementById('cart-items');
             const cartTotalDiv = document.getElementById('cart-total');
+            const paymentBtnWrap = document.getElementById('payment-btn-wrap');
 
             if (cart.length === 0) {
                 cartItemsDiv.innerHTML = '<p style="color: #666; font-style: italic;">Cart is empty</p>';
                 cartTotalDiv.style.display = 'none';
+                paymentBtnWrap.style.display = 'none';
             } else {
                 cartItemsDiv.innerHTML = '';
                 cart.forEach(item => {
@@ -579,6 +581,7 @@
 
                 cartTotalDiv.textContent = `Total: ₹${total}`;
                 cartTotalDiv.style.display = 'block';
+                paymentBtnWrap.style.display = 'block';
             }
         }
 
