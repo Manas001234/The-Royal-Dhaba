@@ -1,520 +1,744 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Dhaba - Login</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
-      * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Dhaba - Sign In</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --maroon-950: #200d0a;
+    --maroon-900: #3a1410;
+    --maroon-800: #4d1c15;
+    --brass: #d4a017;
+    --brass-bright: #e8b93a;
+    --teal: #1f6f6f;
+    --teal-dim: #185858;
+    --cream: #fbf3e3;
+    --ink: #2a1810;
+    --ink-soft: #7a5f4d;
+    --danger: #b3402c;
+    --success: #4c7a4f;
+    --line: rgba(42,24,16,0.16);
+  }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0f0a 100%);  
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
+  *{ box-sizing: border-box; }
 
-        /* Animated background elements */
-        .bg-decoration {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-        }
+  body {
+    margin: 0;
+    font-family: 'Work Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 18px;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(232,185,58,0.10), transparent 55%),
+      linear-gradient(180deg, var(--maroon-950) 0%, var(--maroon-900) 55%, var(--maroon-950) 100%);
+    position: relative;
+    overflow-x: hidden;
+  }
 
-        .bg-decoration::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
-            animation: float 20s infinite linear;
-        }
+  /* string lights across the top */
+  .lights {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 90px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .lights svg { width: 100%; height: 100%; display: block; }
+  .bulb {
+    animation: glow 2.6s ease-in-out infinite;
+  }
+  .bulb:nth-child(3n) { animation-delay: 0.4s; }
+  .bulb:nth-child(3n+1) { animation-delay: 0.9s; }
+  .bulb:nth-child(3n+2) { animation-delay: 1.4s; }
+  @keyframes glow {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
 
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-100px) rotate(360deg); }
-        }
+  .stage {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    max-width: 440px;
+  }
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            width: 90%;
-            max-width: 450px;
-            position: relative;
-            z-index: 10;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
+  /* ---- ornate truck-art style frame ---- */
+  .frame {
+    padding: 6px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, var(--brass), var(--teal) 45%, var(--brass) 100%);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+  }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+  .card {
+    background: var(--cream);
+    border-radius: 18px;
+    padding: 38px 34px 30px;
+    position: relative;
+    overflow: hidden;
+  }
 
-        .crown-icon {
-            font-size: 48px;
-            color: #ff6b35;
-            margin-bottom: 10px;
-            animation: pulse 2s infinite;
-        }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border: 1.5px dashed rgba(31,111,111,0.35);
+    border-radius: 12px;
+    pointer-events: none;
+  }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+  /* subtle dotted texture */
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 20% 20%, var(--maroon-900) 0, transparent 3px),
+                       radial-gradient(circle at 80% 15%, var(--teal) 0, transparent 3px),
+                       radial-gradient(circle at 50% 92%, var(--brass) 0, transparent 3px),
+                       radial-gradient(circle at 88% 85%, var(--maroon-900) 0, transparent 3px),
+                       radial-gradient(circle at 8% 80%, var(--teal) 0, transparent 3px);
+    background-size: 140px 140px;
+  }
 
-        .title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            letter-spacing: 1px;
-        }
+  .header { text-align: center; margin-bottom: 26px; position: relative; }
 
-        .subtitle {
-            color: #7f8c8d;
-            font-size: 16px;
-            font-style: italic;
-        }
+  .crest {
+    width: 52px; height: 52px;
+    margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--brass-bright), var(--brass));
+    box-shadow: 0 6px 18px rgba(212,160,23,0.4);
+    font-size: 26px;
+  }
 
-        .form-container {
-            position: relative;
-        }
+  .title {
+    font-family: 'Fraunces', serif;
+    font-size: 27px;
+    font-weight: 700;
+    color: var(--maroon-900);
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-top: 4px;
+    font-family: 'Fraunces', serif;
+  }
 
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
+  /* Tabs */
+  .tabs {
+    display: flex;
+    margin-bottom: 24px;
+    border-bottom: 1.5px solid var(--line);
+    position: relative;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+    position: relative;
+    background: none;
+    border: none;
+    font-family: 'Work Sans', sans-serif;
+    transition: color 0.2s ease;
+  }
+  .tab.active { color: var(--maroon-900); }
+  .tab-indicator {
+    position: absolute;
+    bottom: -1.5px;
+    height: 2.5px;
+    width: 50%;
+    left: 0;
+    background: var(--teal);
+    border-radius: 2px;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #2c3e50;
-            font-weight: 600;
-            font-size: 14px;
-        }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeUp 0.28s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:translateY(0);} }
 
-        .form-group input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e1e8ed;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
-        }
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #ff6b35;
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-            transform: translateY(-2px);
-        }
+  .input-wrap { position: relative; }
+  .input-wrap .icon {
+    position: absolute;
+    left: 13px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-soft);
+    pointer-events: none;
+    display: flex;
+  }
+  .input-wrap input { padding-left: 40px; }
 
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    background: #fff;
+    font-size: 14.5px;
+    color: var(--ink);
+    outline: none;
+    font-family: 'Work Sans', sans-serif;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  input[type="password"] { padding-right: 42px; }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #ff6b35, #f7931e);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-        }
+  .remember-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: -4px 0 16px;
+    font-size: 12.5px;
+  }
+  .remember-check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .remember-check input {
+    width: 14px; height: 14px;
+    accent-color: var(--teal);
+    padding: 0;
+  }
+  .forgot-link {
+    color: var(--teal-dim);
+    font-weight: 600;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12.5px;
+    font-family: 'Work Sans', sans-serif;
+    padding: 0;
+  }
+  .forgot-link:hover { text-decoration: underline; }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
-        }
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(251,243,227,0.4);
+    border-top-color: var(--cream);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: -2px;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-        .btn-secondary {
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
-            color: white;
-            box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
-        }
+  .avatar {
+    width: 60px; height: 60px;
+    margin: 0 auto 12px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brass-bright), var(--brass));
+    color: var(--maroon-950);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(212,160,23,0.4);
+  }
+  .member-since {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(251,243,227,0.65);
+    margin-top: 8px;
+  }
 
-        .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(116, 185, 255, 0.4);
-        }
+  input:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(31,111,111,0.15);
+  }
+  input.invalid {
+    border-color: var(--danger);
+    animation: shake 0.4s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
 
-        .btn-success {
-            background: linear-gradient(135deg, #00b894, #00a085);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
-            margin-top: 10px;
-        }
+  .toggle-eye {
+    position: absolute;
+    right: 10px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    cursor: pointer;
+    font-size: 15px;
+    color: var(--ink-soft);
+    padding: 4px;
+    line-height: 1;
+  }
 
-        .btn-success:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 184, 148, 0.4);
-        }
+  .error-msg {
+    font-size: 11.5px;
+    color: var(--danger);
+    margin-top: 5px;
+    min-height: 14px;
+  }
 
-        .toggle-link {
-            text-align: center;
-            margin-top: 20px;
-        }
+  .hint {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 5px;
+  }
 
-        .toggle-link a {
-            color: #ff6b35;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
+  .strength {
+    display: flex;
+    gap: 4px;
+    margin-top: 7px;
+  }
+  .strength span {
+    height: 4px;
+    flex: 1;
+    border-radius: 2px;
+    background: var(--line);
+    transition: background 0.2s ease;
+  }
 
-        .toggle-link a:hover {
-            color: #f7931e;
-            text-decoration: underline;
-        }
+  button.submit {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 6px;
+    color: var(--cream);
+    background: linear-gradient(135deg, var(--teal), var(--teal-dim));
+    box-shadow: 0 8px 20px rgba(31,111,111,0.3);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  button.submit:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(31,111,111,0.4); }
+  button.submit:active { transform: translateY(0); }
+  button.submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-        .message {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            animation: slideIn 0.5s ease;
-        }
+  button.submit.brass {
+    background: linear-gradient(135deg, var(--brass-bright), var(--brass));
+    color: var(--maroon-950);
+    box-shadow: 0 8px 20px rgba(212,160,23,0.35);
+  }
 
-        @keyframes slideIn {
-            from { transform: translateY(-10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+  .message {
+    padding: 12px 14px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    font-weight: 600;
+    animation: slideIn 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  @keyframes slideIn { from { opacity:0; transform: translateY(-6px);} to {opacity:1; transform:translateY(0);} }
+  .message.success { background: #e4f1e5; color: var(--success); border: 1px solid #c5ddc6; }
+  .message.error { background: #f6e2dd; color: var(--danger); border: 1px solid #eec6bb; }
 
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
+  /* Dashboard */
+  .dashboard-hero {
+    text-align: center;
+    padding: 28px 20px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--maroon-900), var(--maroon-800));
+    color: var(--cream);
+    margin-bottom: 20px;
+  }
+  .dashboard-hero .crest { margin-bottom: 10px; }
+  .dashboard-hero h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    margin: 0 0 6px;
+  }
+  .dashboard-hero p { font-size: 13px; color: rgba(251,243,227,0.8); margin: 0; }
 
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
+  .dash-link { display: block; text-decoration: none; margin-bottom: 10px; }
 
-        .user-count {
-            text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .form-group input.invalid {
-            border-color: #e74c3c;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                margin: 20px;
-                padding: 30px 25px;
-            }
-            
-            .title {
-                font-size: 24px;
-            }
-            
-            .crown-icon {
-                font-size: 40px;
-            }
-        }
-    </style>
+  /* user count footer */
+  .stat-strip {
+    margin-top: 22px;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(251,243,227,0.06);
+    border: 1px solid rgba(212,160,23,0.3);
+    color: var(--brass-bright);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    max-width: 440px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+</style>
 </head>
 <body>
-    <div class="bg-decoration"></div>
-    
-    <div class="container">
-        <div class="header">
-            <div class="crown-icon">👑</div>
-            <h1 class="title">THE ROYAL DHABA</h1>
-            <p class="subtitle">Authentic Taste, Royal Experience</p>
+
+<div class="lights" aria-hidden="true">
+  <svg viewBox="0 0 440 90" preserveAspectRatio="none">
+    <path d="M0,10 Q220,70 440,10" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="1.5"/>
+    <g id="bulbs"></g>
+  </svg>
+</div>
+
+<div class="stage">
+  <div class="frame">
+    <div class="card">
+      <div class="header">
+        <div class="crest">👑</div>
+        <h1 class="title">The Royal Dhaba</h1>
+        <p class="subtitle">Authentic taste, royal welcome</p>
+      </div>
+
+      <div id="message-container"></div>
+
+      <!-- Auth panels -->
+      <div id="auth-view">
+        <div class="tabs">
+          <button type="button" class="tab active" id="tab-login">Sign in</button>
+          <button type="button" class="tab" id="tab-register">Register</button>
+          <div class="tab-indicator" id="tab-indicator"></div>
         </div>
 
-        <div id="message-container"></div>
-
-        <!-- Login Form -->
-        <div id="login-form" class="form-container">
-            <h2 style="text-align: center; margin-bottom: 25px; color: #2c3e50;">Welcome Back</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="login-username">Username</label>
-                    <input type="text" id="login-username" name="username" required placeholder="Enter your username">
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Password</label>
-                    <input type="password" id="login-password" name="password" required placeholder="Enter your password">
-                </div>
-                <button type="submit" class="btn btn-primary">Sign In</button>
-                </a>
-            </form>
-            <div class="toggle-link">
-                <a href="#" id="show-register">Don't have an account? Register here</a>
+        <div id="login-panel" class="panel active">
+          <form id="loginForm" novalidate>
+            <div class="field">
+              <label for="login-username">Username</label>
+              <div class="input-wrap">
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </span>
+                <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username">
+              </div>
+              <div class="error-msg" data-error-for="login-username"></div>
             </div>
+            <div class="field">
+              <label for="login-password">Password</label>
+              <div class="input-wrap">
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                </span>
+                <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password">
+                <button type="button" class="toggle-eye" data-target="login-password" aria-label="Show password">show</button>
+              </div>
+              <div class="error-msg" data-error-for="login-password"></div>
+            </div>
+            <div class="remember-row">
+              <label class="remember-check">
+                <input type="checkbox" id="remember-me"> Remember me
+              </label>
+              <button type="button" class="forgot-link" id="forgot-password">Forgot password?</button>
+            </div>
+            <button type="submit" class="submit" id="login-submit-btn">Sign in</button>
+            <p class="hint" style="text-align:center; margin-top:12px;">Try the demo — username <strong>demo</strong>, password <strong>demo123</strong></p>
+          </form>
         </div>
 
-        <!-- Registration Form -->
-        <div id="register-form" class="form-container hidden">
-            <h2 style="text-align: center; margin-bottom: 25px; color: #2c3e50;">Join the Royal Family</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="reg-username">Create Username</label>
-                    <input type="text" id="reg-username" name="username" required placeholder="Choose a username">
-                </div>
-                <div class="form-group">
-                    <label for="reg-email">Email Address</label>
-                    <input type="email" id="reg-email" name="email" required placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label for="reg-password">Create Password</label>
-                    <input type="password" id="reg-password" name="password" required placeholder="Create a strong password">
-                </div>
-                <div class="form-group">
-                    <label for="reg-confirm-password">Confirm Password</label>
-                    <input type="password" id="reg-confirm-password" name="confirmPassword" required placeholder="Confirm your password">
-                </div>
-                <button type="submit" class="btn btn-secondary">Create Account</button>
-            </form>
-            <div class="toggle-link">
-                <a href="#" id="show-login">Already have an account? Sign in here</a>
+        <div id="register-panel" class="panel">
+          <form id="registerForm" novalidate>
+            <div class="field">
+              <label for="reg-username">Choose a username</label>
+              <div class="input-wrap">
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                </span>
+                <input type="text" id="reg-username" placeholder="e.g. spicelover22" autocomplete="username">
+              </div>
+              <div class="error-msg" data-error-for="reg-username"></div>
             </div>
+            <div class="field">
+              <label for="reg-email">Email address</label>
+              <div class="input-wrap">
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                </span>
+                <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email">
+              </div>
+              <div class="error-msg" data-error-for="reg-email"></div>
+            </div>
+            <div class="field">
+              <label for="reg-password">Create password</label>
+              <div class="input-wrap">
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                </span>
+                <input type="password" id="reg-password" placeholder="At least 6 characters" autocomplete="new-password">
+                <button type="button" class="toggle-eye" data-target="reg-password" aria-label="Show password">show</button>
+              </div>
+              <div class="strength" id="strength-bar">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="error-msg" data-error-for="reg-password"></div>
+            </div>
+            <div class="field">
+              <label for="reg-confirm-password">Confirm password</label>
+              <div class="input-wrap">
+                <span class="icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                </span>
+                <input type="password" id="reg-confirm-password" placeholder="Re-enter your password" autocomplete="new-password">
+                <button type="button" class="toggle-eye" data-target="reg-confirm-password" aria-label="Show password">show</button>
+              </div>
+              <div class="error-msg" data-error-for="reg-confirm-password"></div>
+            </div>
+            <button type="submit" class="submit brass" id="register-submit-btn">Create account</button>
+          </form>
         </div>
+      </div>
 
-        <!-- Success Dashboard -->
-        <div id="dashboard" class="form-container hidden">
-            <h2 style="text-align: center; margin-bottom: 25px; color: #2c3e50;">Welcome to Royal King Dhaba!</h2>
-            <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #74b9ff, #0984e3); border-radius: 15px; color: white; margin-bottom: 20px;">
-                <h3 id="welcome-user" style="margin-bottom: 10px;"></h3>
-                <p>You have successfully logged in to your royal account!</p>
-            </div>
-            <div>
-                <a href="{{ url_for('home') }}">
-                    <button id="Go to Royal Dhaba" class="btn btn-primary">Go to Royal Dhaba</button>
-                </a>
-            </div>
-            <button id="logout" class="btn btn-primary">Sign Out</button>
+      <!-- Dashboard -->
+      <div id="dashboard" class="hidden" style="display:none;">
+        <div class="dashboard-hero">
+          <div class="avatar" id="user-avatar"></div>
+          <h3 id="welcome-user"></h3>
+          <p>You're signed in to your Royal Dhaba account.</p>
+          <div class="member-since" id="member-since"></div>
         </div>
+        <a class="dash-link" href="{{ url_for('home') }}">
+          <button type="button" class="submit">Go to Royal Dhaba</button>
+        </a>
+        <button type="button" class="submit brass" id="logout">Sign out</button>
+      </div>
 
-        <div class="user-count">
-            <span id="total-users">Total Registered Users: 0</span>
-        </div>
     </div>
+  </div>
 
-    <script>
-        // In-memory user storage
-        let users = [];
-        let currentUser = null;
+  <div class="stat-strip" id="total-users">Total registered users: 0</div>
+</div>
 
-        // DOM Elements
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const dashboard = document.getElementById('dashboard');
-        const messageContainer = document.getElementById('message-container');
-        const totalUsersSpan = document.getElementById('total-users');
-        const welcomeUser = document.getElementById('welcome-user');
+<script>
+  // ---------- decorative string lights ----------
+  (function drawBulbs(){
+    const g = document.getElementById('bulbs');
+    const n = 14;
+    for (let i = 0; i <= n; i++) {
+      const t = i / n;
+      const x = t * 440;
+      const y = 10 + Math.sin(t * Math.PI) * 60;
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', x);
+      c.setAttribute('cy', y + 4);
+      c.setAttribute('r', 3.2);
+      c.setAttribute('fill', i % 2 === 0 ? '#e8b93a' : '#1f6f6f');
+      c.setAttribute('class', 'bulb');
+      g.appendChild(c);
+    }
+  })();
 
-        // Toggle between forms
-        document.getElementById('show-register').addEventListener('click', (e) => {
-            e.preventDefault();
-            loginForm.classList.add('hidden');
-            registerForm.classList.remove('hidden');
-            clearMessages();
-        });
+  // ---------- in-memory user store (demo only) ----------
+  let users = [{
+    id: 1,
+    username: 'demo',
+    email: 'demo@royaldhaba.com',
+    password: 'demo123',
+    registeredAt: new Date().toLocaleString(),
+    lastLogin: null
+  }];
+  let currentUser = null;
 
-        document.getElementById('show-login').addEventListener('click', (e) => {
-            e.preventDefault();
-            registerForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-            clearMessages();
-        });
+  const authView = document.getElementById('auth-view');
+  const dashboard = document.getElementById('dashboard');
+  const messageContainer = document.getElementById('message-container');
+  const totalUsersSpan = document.getElementById('total-users');
+  const welcomeUser = document.getElementById('welcome-user');
 
-        // Registration
-        document.getElementById('registerForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const username = document.getElementById('reg-username').value.trim();
-            const email = document.getElementById('reg-email').value.trim();
-            const password = document.getElementById('reg-password').value;
-            const confirmPassword = document.getElementById('reg-confirm-password').value;
+  // ---------- tabs ----------
+  const tabLogin = document.getElementById('tab-login');
+  const tabRegister = document.getElementById('tab-register');
+  const loginPanel = document.getElementById('login-panel');
+  const registerPanel = document.getElementById('register-panel');
 
-            // Validation
-            if (!username || !email || !password || !confirmPassword) {
-                showMessage('Please fill in all fields', 'error');
-                return;
-            }
+  const tabIndicator = document.getElementById('tab-indicator');
 
-            if (password !== confirmPassword) {
-                showMessage('Passwords do not match', 'error');
-                document.getElementById('reg-confirm-password').classList.add('invalid');
-                setTimeout(() => {
-                    document.getElementById('reg-confirm-password').classList.remove('invalid');
-                }, 500);
-                return;
-            }
+  function activateTab(which) {
+    const isLogin = which === 'login';
+    tabLogin.classList.toggle('active', isLogin);
+    tabRegister.classList.toggle('active', !isLogin);
+    loginPanel.classList.toggle('active', isLogin);
+    registerPanel.classList.toggle('active', !isLogin);
+    tabIndicator.style.transform = isLogin ? 'translateX(0%)' : 'translateX(100%)';
+    clearMessages();
+  }
+  tabLogin.addEventListener('click', () => activateTab('login'));
+  tabRegister.addEventListener('click', () => activateTab('register'));
 
-            if (password.length < 6) {
-                showMessage('Password must be at least 6 characters long', 'error');
-                return;
-            }
+  // ---------- forgot password (demo) ----------
+  document.getElementById('forgot-password').addEventListener('click', () => {
+    showMessage('Please ask a staff member to reset your password at the counter.', 'success');
+  });
 
-            // Check if username already exists
-            if (users.find(user => user.username === username)) {
-                showMessage('Username already exists. Please choose another.', 'error');
-                document.getElementById('reg-username').classList.add('invalid');
-                setTimeout(() => {
-                    document.getElementById('reg-username').classList.remove('invalid');
-                }, 500);
-                return;
-            }
+  // ---------- show/hide password ----------
+  document.querySelectorAll('.toggle-eye').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      btn.textContent = isPassword ? 'hide' : 'show';
+    });
+  });
 
-            // Check if email already exists
-            if (users.find(user => user.email === email)) {
-                showMessage('Email already registered. Please use another email.', 'error');
-                return;
-            }
+  // ---------- password strength ----------
+  const regPassword = document.getElementById('reg-password');
+  const strengthBars = document.querySelectorAll('#strength-bar span');
+  regPassword.addEventListener('input', () => {
+    const val = regPassword.value;
+    let score = 0;
+    if (val.length >= 6) score++;
+    if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+    if (val.length >= 10 && /[^A-Za-z0-9]/.test(val)) score++;
+    const colors = ['#b3402c', '#d4a017', '#4c7a4f'];
+    strengthBars.forEach((bar, i) => {
+      bar.style.background = i < score ? colors[Math.max(score - 1, 0)] : 'var(--line)';
+    });
+  });
 
-            // Create new user
-            const newUser = {
-                id: users.length + 1,
-                username: username,
-                email: email,
-                password: password,
-                registeredAt: new Date().toLocaleString(),
-                lastLogin: null
-            };
+  // ---------- helpers ----------
+  function setError(fieldId, msg) {
+    const input = document.getElementById(fieldId);
+    const err = document.querySelector(`[data-error-for="${fieldId}"]`);
+    if (input) input.classList.toggle('invalid', !!msg);
+    if (err) err.textContent = msg || '';
+  }
 
-            users.push(newUser);
-            updateUserCount();
-            
-            showMessage('Account created successfully! You can now log in.', 'success');
-            
-            // Reset form and switch to login
-            document.getElementById('registerForm').reset();
-            setTimeout(() => {
-                registerForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-                clearMessages();
-            }, 2000);
-        });
+  function showMessage(text, type) {
+    messageContainer.innerHTML = `<div class="message ${type}">${type === 'success' ? '✓' : '⚠'} ${text}</div>`;
+    setTimeout(clearMessages, 4000);
+  }
+  function clearMessages() { messageContainer.innerHTML = ''; }
 
-        // Login
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value;
+  function updateUserCount() {
+    totalUsersSpan.textContent = `Total registered users: ${users.length}`;
+  }
+  updateUserCount();
 
-            if (!username || !password) {
-                showMessage('Please enter both username and password', 'error');
-                return;
-            }
+  // ---------- button loading state ----------
+  function setLoading(btn, loading, labelWhileLoading, originalLabel) {
+    btn.disabled = loading;
+    btn.innerHTML = loading ? `<span class="spinner"></span>${labelWhileLoading}` : originalLabel;
+  }
 
-            // Find user
-            const user = users.find(u => u.username === username && u.password === password);
-            
-            if (user) {
-                // Update last login
-                user.lastLogin = new Date().toLocaleString();
-                currentUser = user;
-                
-                // Show dashboard
-                loginForm.classList.add('hidden');
-                dashboard.classList.remove('hidden');
-                welcomeUser.textContent = `Hello, ${user.username}!`;
-                showMessage('Login successful! Welcome to Royal Dhaba.', 'success');
-            } else {
-                showMessage('Invalid username or password. Please try again.', 'error');
-                document.getElementById('login-username').classList.add('invalid');
-                document.getElementById('login-password').classList.add('invalid');
-                setTimeout(() => {
-                    document.getElementById('login-username').classList.remove('invalid');
-                    document.getElementById('login-password').classList.remove('invalid');
-                }, 500);
-            }
-        });
+  // ---------- registration ----------
+  const registerBtn = document.getElementById('register-submit-btn');
+  document.getElementById('registerForm').addEventListener('submit', (e) => {
+    e.preventDefault();
 
-        // Logout
-        document.getElementById('logout').addEventListener('click', () => {
-            currentUser = null;
-            dashboard.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-            document.getElementById('loginForm').reset();
-            clearMessages();
-            showMessage('You have been logged out successfully.', 'success');
-        });
+    const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirmPassword = document.getElementById('reg-confirm-password').value;
 
-        // Helper functions
-        function showMessage(text, type) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            messageDiv.textContent = text;
-            
-            messageContainer.innerHTML = '';
-            messageContainer.appendChild(messageDiv);
-            
-            setTimeout(() => {
-                messageDiv.remove();
-            }, 5000);
-        }
+    ['reg-username', 'reg-email', 'reg-password', 'reg-confirm-password'].forEach(id => setError(id, ''));
+    let valid = true;
 
-        function clearMessages() {
-            messageContainer.innerHTML = '';
-        }
+    if (!username) { setError('reg-username', 'Choose a username'); valid = false; }
+    else if (users.find(u => u.username === username)) { setError('reg-username', 'Username already taken'); valid = false; }
 
-        function updateUserCount() {
-            totalUsersSpan.textContent = `Total Registered Users: ${users.length}`;
-        }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError('reg-email', 'Enter a valid email'); valid = false; }
+    else if (users.find(u => u.email === email)) { setError('reg-email', 'Email already registered'); valid = false; }
 
-        // Initialize
-        updateUserCount();
-        
-        // Demo data for testing (remove in production)
-        users.push({
-            id: 1,
-            username: 'demo',
-            email: 'demo@royaldhaba.com',
-            password: 'demo123',
-            registeredAt: new Date().toLocaleString(),
-            lastLogin: null
-        });
-        updateUserCount();
-    </script>
+    if (password.length < 6) { setError('reg-password', 'At least 6 characters'); valid = false; }
+
+    if (confirmPassword !== password) { setError('reg-confirm-password', 'Passwords do not match'); valid = false; }
+
+    if (!valid) return;
+
+    setLoading(registerBtn, true, 'Creating account…', 'Create account');
+    setTimeout(() => {
+      users.push({
+        id: users.length + 1,
+        username, email, password,
+        registeredAt: new Date().toLocaleString(),
+        lastLogin: null
+      });
+      updateUserCount();
+      showMessage('Account created — you can sign in now.', 'success');
+      document.getElementById('registerForm').reset();
+      strengthBars.forEach(bar => bar.style.background = 'var(--line)');
+      setLoading(registerBtn, false, '', 'Create account');
+      setTimeout(() => activateTab('login'), 900);
+    }, 550);
+  });
+
+  // ---------- login ----------
+  const loginBtn = document.getElementById('login-submit-btn');
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    setError('login-username', '');
+    setError('login-password', '');
+
+    if (!username || !password) {
+      showMessage('Enter both username and password', 'error');
+      if (!username) setError('login-username', 'Required');
+      if (!password) setError('login-password', 'Required');
+      return;
+    }
+
+    setLoading(loginBtn, true, 'Signing in…', 'Sign in');
+
+    setTimeout(() => {
+      const user = users.find(u => u.username === username && u.password === password);
+
+      if (user) {
+        user.lastLogin = new Date().toLocaleString();
+        currentUser = user;
+        authView.style.display = 'none';
+        dashboard.style.display = 'block';
+        welcomeUser.textContent = `Hello, ${user.username}!`;
+        document.getElementById('user-avatar').textContent = user.username.slice(0, 2).toUpperCase();
+        document.getElementById('member-since').textContent = `Member since ${user.registeredAt.split(',')[0]}`;
+        showMessage('Signed in successfully.', 'success');
+      } else {
+        showMessage('Invalid username or password.', 'error');
+        setError('login-username', ' ');
+        setError('login-password', 'Check your credentials');
+      }
+      setLoading(loginBtn, false, '', 'Sign in');
+    }, 500);
+  });
+
+  // ---------- logout ----------
+  document.getElementById('logout').addEventListener('click', () => {
+    currentUser = null;
+    dashboard.style.display = 'none';
+    authView.style.display = 'block';
+    document.getElementById('loginForm').reset();
+    activateTab('login');
+    showMessage('You have been signed out.', 'success');
+  });
+</script>
+
 </body>
 </html>
