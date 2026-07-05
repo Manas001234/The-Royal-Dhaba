@@ -673,12 +673,31 @@
     placeOrderBtn.disabled = true;
     placeOrderBtn.textContent = 'Placing order…';
 
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
     try {
-      await fetch('/clear_cart', { method: 'POST' });
-      showToast('Order placed successfully');
-      setTimeout(() => {
-        window.location.href = "{{ url_for('home') }}";
-      }, 1200);
+      const res = await fetch('/place_order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('name').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          payment_method: paymentMethod
+        })
+      });
+      const data = await res.json();
+
+      if (data.status === 'ok') {
+        showToast('Order placed successfully');
+        setTimeout(() => {
+          window.location.href = `/track/${data.order_id}`;
+        }, 900);
+      } else {
+        showToast(data.message || 'Something went wrong');
+        placeOrderBtn.disabled = false;
+        placeOrderBtn.textContent = 'Place order';
+      }
     } catch (err) {
       showToast('Something went wrong. Try again.');
       placeOrderBtn.disabled = false;

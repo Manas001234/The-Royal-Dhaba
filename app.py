@@ -127,3 +127,63 @@ def clear_cart():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+import time
+import uuid
+
+orders = {}  # demo ke liye in-memory store
+
+@app.route('/place_order', methods=['POST'])
+def place_order():
+    data = request.get_json()
+    cart = session.get('cart', [])
+    if not cart:
+        return jsonify({'status': 'error', 'message': 'Cart is empty'}), 400
+
+    order_id = str(uuid.uuid4())[:8]
+    total = sum(item['price'] * item['quantity'] for item in cart)
+
+    orders[order_id] = {
+        'items': cart,
+        'total': total,
+        'name': data.get('name'),
+        'address': data.get('address'),
+        'phone': data.get('phone'),
+        'payment_method': data.get('payment_method', 'cod'),
+        'created_at': time.time()
+    }
+
+    session['cart'] = []
+    return jsonify({'status': 'ok', 'order_id': order_id})
+
+
+@app.route('/track/<order_id>')
+def track_order(order_id):
+    if order_id not in orders:
+        return redirect(url_for('home'))
+    return render_template('tracking.html', order_id=order_id)
+
+
+@app.route('/order_status/<order_id>')
+def order_status(order_id):
+    order = orders.get(order_id)
+    if not order:
+        return jsonify({'status': 'error', 'message': 'Order not found'}), 404
+
+    # demo ke liye time ke hisaab se stage aage badhta hai
+    elapsed = time.time() - order['created_at']
+    if elapsed < 8:
+        stage = 1
+    elif elapsed < 25:
+        stage = 2
+    elif elapsed < 50:
+        stage = 3
+    else:
+        stage = 4
+
+    return jsonify({
+        'stage': stage,
+        'items': order['items'],
+        'total': order['total'],
+        'payment_method': order['payment_method']
+    })
