@@ -128,9 +128,13 @@
     </select>
     <label for="delivery-time">Preferred Delivery Time</label>
     <input type="datetime-local" id="delivery-time">
-    <a href="homepage.html">
-        <button onclick="placeOrder()">Place Order</button>
-    </a>
+
+    <label>Your Order</label>
+    <div id="order-summary" style="background: rgba(255,255,255,0.7); border-radius: 8px; padding: 12px; margin-top: 5px;">
+        Loading cart...
+    </div>
+
+    <button onclick="placeOrder()">Place Order</button>
 </div>
 
 <script>
@@ -151,8 +155,36 @@
         });
     });
 
-    function placeOrder() {
+    // Cart load karo aur dikhao
+    async function loadOrderSummary() {
+        const res = await fetch('/get_cart');
+        const data = await res.json();
+        const summaryDiv = document.getElementById('order-summary');
+
+        if (data.cart.length === 0) {
+            summaryDiv.innerHTML = '<p>Your cart is empty.</p>';
+            return;
+        }
+
+        let html = '';
+        data.cart.forEach(item => {
+            html += `<div style="display:flex; justify-content:space-between;">
+                        <span>${item.name} x${item.quantity}</span>
+                        <span>₹${item.price * item.quantity}</span>
+                     </div>`;
+        });
+        html += `<hr><div style="display:flex; justify-content:space-between; font-weight:bold;">
+                    <span>Total</span><span>₹${data.total}</span>
+                 </div>`;
+        summaryDiv.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOrderSummary);
+
+    async function placeOrder() {
+        await fetch('/clear_cart', { method: 'POST' });
         alert("✅ Order placed successfully!");
+        window.location.href = "{{ url_for('home') }}";
     }
 </script>
 

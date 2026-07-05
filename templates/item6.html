@@ -503,7 +503,7 @@
             Total: ₹0
         </div>
         <div style="margin-top: 20px;">
-                <a href="payment.html">
+                <a href="{{ url_for('payment') }}">
                      <button id="Payment" class="btn btn-primary">Payment</button>
                 </a>
         </div>
@@ -518,25 +518,28 @@
         let cart = [];
         let total = 0;
 
-        function addToCart(name, price) {
-            // Check if item already exists in cart
-            const existingItem = cart.find(item => item.name === name);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({ name, price, quantity: 1 });
-            }
-            
-            total += price;
+        async function loadCart() {
+            const res = await fetch('/get_cart');
+            const data = await res.json();
+            cart = data.cart;
+            total = data.total;
             updateCartDisplay();
+        }
+
+        async function addToCart(name, price) {
+            await fetch('/add_to_cart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, price })
+            });
+            await loadCart();
             showNotification();
         }
 
         function updateCartDisplay() {
             const cartItemsDiv = document.getElementById('cart-items');
             const cartTotalDiv = document.getElementById('cart-total');
-            
+
             if (cart.length === 0) {
                 cartItemsDiv.innerHTML = '<p style="color: #666; font-style: italic;">Cart is empty</p>';
                 cartTotalDiv.style.display = 'none';
@@ -551,7 +554,7 @@
                     `;
                     cartItemsDiv.appendChild(cartItem);
                 });
-                
+
                 cartTotalDiv.textContent = `Total: ₹${total}`;
                 cartTotalDiv.style.display = 'block';
             }
@@ -560,35 +563,14 @@
         function showNotification() {
             const notification = document.getElementById('notification');
             notification.classList.add('show');
-            
+
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 2000);
         }
 
-        // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.biryani-card');
-            
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(50px)';
-                card.style.animation = 'fadeInUp 0.6s ease forwards';
-            });
-        });
-
-        // Add CSS animation keyframes via JavaScript
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInUp {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        `;
-        document.head.appendChild(style);
+        // Page load hote hi server se cart fetch karo
+        document.addEventListener('DOMContentLoaded', loadCart);
     </script>
 </body>
 </html>
