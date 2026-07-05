@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Address & Payment</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0f0a 100%);
+        padding: 20px;
+    }
+    .container {
+        max-width: 600px;
+        margin: auto;
+        background: rgba(179, 102, 102, 0.95);
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #444;
+    }
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        outline: none;
+    }
+    .payment-option {
+        margin-top: 10px;
+    }
+    .hidden {
+        display: none;
+    }
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 20px;
+        background: linear-gradient(to right, #28a745, #218838);
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    button:hover {
+        background: linear-gradient(to right, #218838, #1e7e34);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Delivery Address & Payment</h2>
+    
+    <!-- Delivery Address -->
+    <label for="name">Full Name</label>
+    <input type="text" id="name" placeholder="Enter your name" required>
+
+    <label for="address">Address</label>
+    <textarea id="address" rows="3" placeholder="Enter your delivery address" required></textarea>
+
+    <label for="pincode">Pincode</label>
+    <input type="text" id="pincode" placeholder="Enter pincode" required>
+
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" placeholder="Enter phone number" required>
+
+    <!-- Payment System -->
+    <label>Payment Method</label>
+    <div class="payment-option">
+        <input type="radio" name="payment" value="cod" checked> Cash on Delivery
+    </div>
+    <div class="payment-option">
+        <input type="radio" name="payment" value="card"> Credit/Debit Card
+        <div id="card-details" class="hidden">
+            <label>Card Number</label>
+            <input type="text" placeholder="1234 5678 9876 5432">
+            <label>Expiry Date</label>
+            <input type="month">
+            <label>CVV</label>
+            <input type="password" placeholder="***" maxlength="3">
+        </div>
+    </div>
+    <div class="payment-option">
+        <input type="radio" name="payment" value="netbanking"> Netbanking
+        <div id="netbanking-details" class="hidden">
+            <label>Select Bank</label>
+            <select>
+                <option>SBI</option>
+                <option>HDFC</option>
+                <option>ICICI</option>
+                <option>Axis Bank</option>
+                <option>PNB</option>
+            </select>
+        </div>
+    </div>
+    <div class="payment-option">
+        <input type="radio" name="payment" value="upi"> UPI
+        <div id="upi-details" class="hidden">
+            <label>UPI ID</label>
+            <input type="text" placeholder="example@upi">
+        </div>
+    </div>
+    <label for="notes">Additional Notes</label>
+    <textarea id="notes" rows="2" placeholder="Any special instructions or notes"></textarea>
+    <label for="email">Email (optional)</label>
+    <input type="email" id="email" placeholder="Enter your email">
+    <label for="promo">Promo Code (optional)</label>
+    <input type="text" id="promo" placeholder="Enter promo code">
+    <label for="gift">Gift Option</label>
+    <select id="gift">
+        <option value="no">No Gift</option>
+        <option value="yes">Yes, wrap it as a gift</option>
+    </select>
+    <label for="delivery-time">Preferred Delivery Time</label>
+    <input type="datetime-local" id="delivery-time">
+    <a href="homepage.html">
+        <button onclick="placeOrder()">Place Order</button>
+    </a>
+</div>
+
+<script>
+    const paymentRadios = document.querySelectorAll('input[name="payment"]');
+    const cardDetails = document.getElementById('card-details');
+    const netbankingDetails = document.getElementById('netbanking-details');
+    const upiDetails = document.getElementById('upi-details');
+
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            cardDetails.classList.add('hidden');
+            netbankingDetails.classList.add('hidden');
+            upiDetails.classList.add('hidden');
+
+            if (radio.value === 'card') cardDetails.classList.remove('hidden');
+            if (radio.value === 'netbanking') netbankingDetails.classList.remove('hidden');
+            if (radio.value === 'upi') upiDetails.classList.remove('hidden');
+        });
+    });
+
+    function placeOrder() {
+        alert("✅ Order placed successfully!");
+    }
+</script>
+
+</body>
+</html>

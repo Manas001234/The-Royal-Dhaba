@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Kulfi - Order Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0f0a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0f0a 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(100px); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px;
+        }
+
+        .royal-kulfi-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .royal-kulfi-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-image {
+            height: 200px;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .royal-kulfi-card:hover .card-image::before {
+            left: 100%;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .royal-kulfi-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .royal-kulfi-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 5px;
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .star.empty {
+            color: #ddd;
+        }
+
+        .rating-text {
+            margin-left: 10px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .price-order {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .order-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #764ba2, #667eea);
+        }
+
+        .order-btn:active {
+            transform: translateY(0);
+        }
+
+        .cart {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .cart h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #ff6b6b;
+        }
+
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .cart {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px;
+                width: calc(100% - 40px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍮 Royal Kulfi Items</h1>
+            <p class="subtitle">Authentic Flavors from Around the World</p>
+        </header>
+
+        <div class="menu-grid">
+            <!-- Malai Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width=450px" src="https://www.crazymasalafood.com/wp-content/images/pista-kulfi-2.jpg" alt="Malai Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Malai Kulfi</h3>
+                    <p class="royal-kulfi-description">It has a thick layer of milk called as Malai, added in the mixture of kulfi for good bite. .</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">4.8 (245 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹20</span>
+                        <button class="order-btn" onclick="addToCart('Malai Kulfi', 20)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pista Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://crazymasalafood.com/wp-content/images/Pistha-Kulfi-6.jpg.webp" alt="Pista Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Pista Kulfi</h3>
+                    <p class="royal-kulfi-description">A creamy, nutty dessert made with pistachios and khoya.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">4.9 (189 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹40</span>
+                        <button class="order-btn" onclick="addToCart('Pista Kulfi', 40)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mango Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://www.crazymasalafood.com/wp-content/images/mango-kulfi-1.jpg" alt="Mango Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Mango Kulfi</h3>
+                    <p class="royal-kulfi-description">A refreshing dessert made with ripe mangoes and creamy milk.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span class="rating-text">4.6 (156 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹30</span>
+                        <button class="order-btn" onclick="addToCart('Mango Kulfi', 30)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strawberry Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://www.crazymasalafood.com/wp-content/images/strawberry_kulfi.jpg" alt="Strawberry Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Strawberry Kulfi</h3>
+                    <p class="royal-kulfi-description">A delightful dessert made with fresh strawberries and creamy milk.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">4.7 (98 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹50</span>
+                        <button class="order-btn" onclick="addToCart('Strawberry Kulfi', 50)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Butter Scotch Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://www.crazymasalafood.com/wp-content/images/butter-scotch.jpg" alt="Butter Scotch Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Butter Scotch Kulfi</h3>
+                    <p class="royal-kulfi-description">A rich and creamy dessert made with butter scotch and milk.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span class="rating-text">4.5 (203 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹49</span>
+                        <button class="order-btn" onclick="addToCart('Butter Scotch Kulfi', 49)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Litchi Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://www.crazymasalafood.com/wp-content/images/litchi.jpg" alt="Litchi Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Litchi Kulfi</h3>
+                    <p class="royal-kulfi-description">A refreshing dessert made with juicy litchis and creamy milk.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span class="rating-text">4.4 (167 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹39</span>
+                        <button class="order-btn" onclick="addToCart('Litchi Kulfi', 39)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chocolate Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://www.crazymasalafood.com/wp-content/images/chocolate-10.jpg" alt="Chocolate Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Chocolate Kulfi</h3>
+                    <p class="royal-kulfi-description">A rich and creamy kulfi flavored with chocolate.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                        <span class="rating-text">4.8 (134 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹30</span>
+                        <button class="order-btn" onclick="addToCart('Chocolate Kulfi', 30)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kesar Pista Kulfi -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://www.crazymasalafood.com/wp-content/images/kesar-2.jpg" alt="Kesar Pista Kulfi"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Kesar Pista Kulfi</h3>
+                    <p class="royal-kulfi-description">A rich and creamy kulfi flavored with saffron and pistachios.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span class="rating-text">4.6 (178 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹40</span>
+                        <button class="order-btn" onclick="addToCart('Kesar Pista Kulfi', 40)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kesar Badam -->
+            <div class="royal-kulfi-card">
+                <div class="card-image"><img width="450px" src="https://www.crazymasalafood.com/wp-content/images/kesar-badam.jpg" alt="Kesar Badam"></div>
+                <div class="card-content">
+                    <h3 class="royal-kulfi-name">Kesar Badam</h3>
+                    <p class="royal-kulfi-description">A rich and creamy kulfi flavored with saffron and almonds.</p>
+                    <div class="rating">
+                        <div class="stars">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                        <span class="rating-text">4.3 (89 reviews)</span>
+                    </div>
+                    <div class="price-order">
+                        <span class="price">₹49</span>
+                        <button class="order-btn" onclick="addToCart('Kesar Badam', 49)">Order Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart -->
+    <div class="cart">
+        <h3>🛒 Your Cart</h3>
+        <div id="cart-items">
+            <p style="color: #666; font-style: italic;">Cart is empty</p>
+        </div>
+        <div class="cart-total" id="cart-total" style="display: none;">
+            Total: ₹0
+        </div>
+        <div style="margin-top: 20px;">
+                <a href="payment.html">
+                     <button id="Payment" class="btn btn-primary">Payment</button>
+                </a>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        Item added to cart! 🎉
+    </div>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        function addToCart(name, price) {
+            // Check if item already exists in cart
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            
+            total += price;
+            updateCartDisplay();
+            showNotification();
+        }
+
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            const cartTotalDiv = document.getElementById('cart-total');
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p style="color: #666; font-style: italic;">Cart is empty</p>';
+                cartTotalDiv.style.display = 'none';
+            } else {
+                cartItemsDiv.innerHTML = '';
+                cart.forEach(item => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <span>${item.name} x${item.quantity}</span>
+                        <span>₹${item.price * item.quantity}</span>
+                    `;
+                    cartItemsDiv.appendChild(cartItem);
+                });
+                
+                cartTotalDiv.textContent = `Total: ₹${total}`;
+                cartTotalDiv.style.display = 'block';
+            }
+        }
+
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.biryani-card');
+            
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.animation = 'fadeInUp 0.6s ease forwards';
+            });
+        });
+
+        // Add CSS animation keyframes via JavaScript
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

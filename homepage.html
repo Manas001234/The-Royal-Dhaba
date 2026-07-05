@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Royal Dhaba - Authentic Indian Cuisine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0f0a 100%);
+            color: #f4e4c1;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(139, 69, 19, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(218, 165, 32, 0.3);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #daa520;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+            50% { text-shadow: 2px 2px 8px rgba(218, 165, 32, 0.8); }
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: #f4e4c1;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #daa520;
+            transform: translateY(-2px);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #daa520;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(218, 165, 32, 0.1) 0%, transparent 70%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23daa520" opacity="0.1"/></svg>') repeat;
+            animation: stars 20s linear infinite;
+        }
+
+        @keyframes stars {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #daa520, #ffd700, #daa520);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #daa520, #ffd700);
+            color: #1a0f0a;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            box-shadow: 0 8px 25px rgba(218, 165, 32, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(218, 165, 32, 0.6);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Menu Section */
+        .menu-section {
+            padding: 100px 0;
+            background: rgba(45, 24, 16, 0.5);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            color: #daa520;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #daa520, #ffd700);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .menu-item {
+            background: rgba(139, 69, 19, 0.3);
+            border: 2px solid rgba(218, 165, 32, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            border-color: #daa520;
+            box-shadow: 0 20px 40px rgba(218, 165, 32, 0.2);
+        }
+
+        .menu-item h3 {
+            color: #daa520;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .menu-item p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .menu-item a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #daa520, #ffd700);
+            color: #1a0f0a;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item a:hover {
+            background: linear-gradient(45deg, #ffd700, #daa520);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-content p {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 100px 0;
+            background: rgba(45, 24, 16, 0.5);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .contact-card {
+            background: rgba(139, 69, 19, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(218, 165, 32, 0.3);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            border-color: #daa520;
+        }
+
+        .contact-card h3 {
+            color: #daa520;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(26, 15, 10, 0.9);
+            text-align: center;
+            padding: 40px 0;
+            border-top: 2px solid rgba(218, 165, 32, 0.3);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">👑 The Royal Dhaba</div>
+            <ul class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>The Royal Dhaba</h1>
+            <p>Experience the Authentic Flavors of Royal Indian Cuisine</p>
+            <a href="#menu" class="cta-button">Explore Our Menu</a>
+        </div>
+    </section>
+
+    <section class="menu-section" id="menu">
+        <div class="container">
+            <h2 class="section-title">Our Royal Menu</h2>
+            <div class="menu-grid">
+                <div class="menu-item fade-in">
+                    <h3>🍛 Biryani Royal</h3>
+                    <p>Aromatic basmati rice cooked with tender meat and exotic spices, served with raita and shorba</p>
+                    <div class="price">₹200 - ₹500</div>
+                    <a href="item1.html"><b>View Items</b></a>
+                </div>
+                <div class="menu-item fade-in">
+                    <h3>🍖 Mutton Rogan Josh</h3>
+                    <p>Slow-cooked mutton in rich tomato and yogurt gravy with traditional Kashmiri spices</p>
+                    <div class="price">₹450</div>
+                    <a href="item2.html"><b>View Items</b></a>
+                </div>
+                <div class="menu-item fade-in">
+                    <h3>🍗 Butter Chicken</h3>
+                    <p>Tender chicken tikka in creamy tomato gravy, a perfect blend of spices and richness</p>
+                    <div class="price">₹320</div>
+                    <a href="item3.html"><b>View Items</b></a>
+                </div>
+                <div class="menu-item fade-in">
+                    <h3>🥘 Dal Makhani</h3>
+                    <p>Slow-cooked black lentils with butter and cream, simmered to perfection</p>
+                    <div class="price">₹250</div>
+                    <a href="item4.html"><b>View Items</b></a>
+                </div>
+                <div class="menu-item fade-in">
+                    <h3>🥖 Naan Varieties</h3>
+                    <p>Freshly baked naans - butter, garlic, cheese, and stuffed varieties</p>
+                    <div class="price">₹80-150</div>
+                    <a href="item5.html"><b>View Items</b></a>
+                </div>
+                <div class="menu-item fade-in">
+                    <h3>🍮 Royal Kulfi</h3>
+                    <p>Traditional Indian ice cream with cardamom, pistachio, and saffron flavors</p>
+                    <div class="price">₹120</div>
+                    <a href="item6.html"><b>View Items</b></a>
+                </div>
+                <div class="menu-item fade-in">
+                    <h3>🍛 Paneer Items</h3>
+                    <p>Paneer Tikka, Palak Paneer, Matar Paneer, Kadai Paneer, and Shahi Paneer - a royal selection of paneer dishes</p>
+                    <div class="price">₹200-350</div>
+                    <a href="item7.html"><b>View Items</b></a>
+                </div>
+                <div class="menu-item fade-in">
+                    <h3>🍮 Chhole Bhature</h3>
+                    <p>Chole Bhature is one of India’s most beloved dishes, a perfect combination of spicy chickpea curry (Chole) and deep-fried, fluffy bread (Bhature). </p>
+                    <div class="price">₹120</div>
+                    <a href="item8.html"><b>View Items</b></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2 class="section-title">About The Royal Dhaba</h2>
+            <div class="about-content fade-in">
+                <p>Welcome to The Royal Dhaba, where tradition meets taste in every bite. Our journey began with a passion for authentic Indian cuisine and a commitment to serving the finest flavors from across the subcontinent.</p>
+                <p>We pride ourselves on using only the freshest ingredients, traditional cooking methods, and recipes passed down through generations. Each dish is carefully crafted to bring you the true essence of Indian hospitality and culinary excellence.</p>
+                <p>Step into our royal ambiance and let us take you on a gastronomic journey that celebrates the rich heritage of Indian cuisine.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Visit Us</h2>
+            <div class="contact-grid">
+                <div class="contact-card fade-in">
+                    <h3>📍 Location</h3>
+                    <p>123 Royal Street<br>Spice Quarter<br>Meja, Prayagraj</p>
+                </div>
+                <div class="contact-card fade-in">
+                    <h3>📞 Phone</h3>
+                    <p>+91 74086 09768<br>+91 99358 32332</p>
+                </div>
+                <div class="contact-card fade-in">
+                    <h3>🕒 Hours</h3>
+                    <p>Mon - Sun<br>11:00 AM - 11:00 PM</p>
+                </div>
+                <div class="contact-card fade-in">
+                    <h3>✉️ Email</h3>
+                    <p>info@royaldhaba.com<br>orders@royaldhaba.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 The Royal Dhaba. All rights reserved. Crafted with ❤️ for food lovers.</p>
+        </div>
+    </footer>
+
+    <script>
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(139, 69, 19, 0.98)';
+            } else {
+                header.style.background = 'rgba(139, 69, 19, 0.95)';
+            }
+        });
+
+        // Fade in animation on scroll
+        function fadeInOnScroll() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', fadeInOnScroll);
+        fadeInOnScroll(); // Run on page load
+
+        // Menu item hover effects
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Dynamic background particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = 'rgba(218, 165, 32, 0.3)';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = '-10px';
+            particle.style.zIndex = '1';
+            
+            document.body.appendChild(particle);
+            
+            let position = -10;
+            const speed = Math.random() * 3 + 1;
+            
+            function animateParticle() {
+                position += speed;
+                particle.style.top = position + 'px';
+                
+                if (position < window.innerHeight + 10) {
+                    requestAnimationFrame(animateParticle);
+                } else {
+                    particle.remove();
+                }
+            }
+            
+            animateParticle();
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 2000);
+
+        // Welcome message
+        console.log('🍛 Welcome to The Royal Dhaba! Enjoy your visit to our royal dining experience.');
+        
+    </script>
+</body>
+</html>
